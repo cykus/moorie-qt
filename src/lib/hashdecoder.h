@@ -1,7 +1,7 @@
 /*
  * This file is a part of Moorie
  *
- * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl
+ * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl/
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +18,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#ifndef HASHDECODER_H__
+#define HASHDECODER_H__
 
-#include <QtCore/qglobal.h>
+#include <string>
+#include <QString>
+#include <boost/shared_ptr.hpp>
+#include "hash.h"
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
+class HashDecoder {
+	public:
+		virtual ~HashDecoder() {}
 
-#endif // MOORIE_GLOBAL_H
+	public:
+		/**
+		 * Decodes supplied hashcode string.
+		 * @param hashcode Hashcode string to decode.
+		 * @return Decoded hash object.
+		 */
+                virtual Hash* decode(const QString& hashcode) =0;
+};
+
+#endif // HASHDECODER_H__

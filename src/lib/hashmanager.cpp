@@ -1,7 +1,7 @@
 /*
  * This file is a part of Moorie
  *
- * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl
+ * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl/
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +18,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#include <QRegExp>
+#include "hashmanager.h"
+#include "hashdecoder.h"
+#include <QSharedPointer>
+#include "moorhunthashdecoder.h"
 
-#include <QtCore/qglobal.h>
+const QRegExp moorhuntHashRegex("(<<a[a-h].*>>)");
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
+Hash* HashManager::fromString(const QString& hashcode) {
 
-#endif // MOORIE_GLOBAL_H
+    int pos = 0;
+    if (moorhuntHashRegex.indexIn(hashcode, pos) != -1) {
+
+        QSharedPointer<HashDecoder> decoder(new MoorhuntHashDecoder());
+        return decoder->decode(moorhuntHashRegex.cap(1));
+    }
+    else
+        throw std::exception();
+}

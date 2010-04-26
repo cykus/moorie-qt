@@ -1,7 +1,7 @@
 /*
  * This file is a part of Moorie
  *
- * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl
+ * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl/
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +18,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#include "hash.h"
 
-#include <QtCore/qglobal.h>
+Hash::Hash(HashInfo hashInfo)
+	: model_(hashInfo)
+{
+}
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
+Hash::~Hash() { }
 
-#endif // MOORIE_GLOBAL_H
+bool Hash::checkAccessPassword(const std::string& password) {
+	return true;
+}

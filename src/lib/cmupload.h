@@ -16,17 +16,26 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+ */ 
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#ifndef CMUPLOAD_H
+#define CMUPLOAD_H
 
-#include <QtCore/qglobal.h>
+#include "cmtransfer.h"
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
+class CMUpload: public CMTransfer
+{
+public:
+    CMUpload(CMStats *stats );
 
-#endif // MOORIE_GLOBAL_H
+    void run();
+    bool prepare();
+    bool selectMailbox();
+    bool startTransfer();
+    bool finalize();
+    bool resume();
+    bool needsResuming();
+    bool abort();
+};
+
+#endif // CMUPLOAD_H

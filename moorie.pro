@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS = lib \
-          cli
+SUBDIRS = src \
+          libs

@@ -1,7 +1,7 @@
 /*
  * This file is a part of Moorie
  *
- * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl
+ * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl/
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,15 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#ifndef MOORHUNTHASH_H__
+#define MOORHUNTHASH_H__
 
-#include <QtCore/qglobal.h>
+#include "hash.h"
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
+class MoorhuntHash : public Hash {
+	public:
+		explicit MoorhuntHash(HashInfo hashInfo);
 
-#endif // MOORIE_GLOBAL_H
+	public:
+		bool checkAccessPassword(const std::string& password);
+};
+
+#endif // MOORHUNTHASH_H__

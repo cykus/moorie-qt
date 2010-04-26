@@ -16,17 +16,44 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+ */ 
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#include "cmdownload.h"
 
-#include <QtCore/qglobal.h>
+CMDownload::CMDownload(CMStats *stats ):
+        CMTransfer(stats),
+        doStop(false)
+{
+}
+void CMDownload::run()
+{
+    while(!doStop)
+    {
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
+        CMStats::state state = getStats()->getState();
 
-#endif // MOORIE_GLOBAL_H
+        if(needsResuming())
+            resume();
+
+        if( state == CMStats::unprepared )
+        {
+            if( prepare() )
+                startTransfer();
+        }
+        else if( state == CMStats::prepared )
+        {
+            startTransfer();
+        }
+        else if( state == CMStats::transferred )
+        {
+            finalize();
+        }
+    }
+}
+bool CMDownload::prepare(){}
+bool CMDownload::selectMailbox(){}
+bool CMDownload::startTransfer(){}
+bool CMDownload::finalize(){}
+bool CMDownload::resume(){}
+bool CMDownload::needsResuming(){}
+bool CMDownload::abort(){}

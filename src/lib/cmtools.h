@@ -18,15 +18,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#ifndef CMTOOLS_H
+#define CMTOOLS_H
 
-#include <QtCore/qglobal.h>
+class CMTools
+{
+public:
+    CMTools();
+};
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
-#endif
-
-#endif // MOORIE_GLOBAL_H
+#endif // CMTOOLS_H

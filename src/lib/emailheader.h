@@ -1,7 +1,7 @@
 /*
  * This file is a part of Moorie
  *
- * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl
+ * Copyright (C) 2007-2010 Moorie Team - http://moorie.pl/
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,16 +17,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+   
+#ifndef __EMAILHEADER_H
+#define __EMAILHEADER_H
 
-#ifndef MOORIE_GLOBAL_H
-#define MOORIE_GLOBAL_H
+#include <string>
 
-#include <QtCore/qglobal.h>
+//! Email header data
+struct EmailHeader
+{
+	std::string subject; //!< Email message subject
+	std::string uniqueId; //!< Unique id of the message
 
-#if defined(MOORIE_LIBRARY)
-#  define MOORIESHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define MOORIESHARED_EXPORT Q_DECL_IMPORT
+	EmailHeader(const std::string& id, const std::string& subj)
+    : uniqueId(id)
+	{
+    subject = decode(subj);
+  }
+
+    private:
+	    std::string decode(const std::string&);
+	    std::string asciiDecode(const std::string&);
+};
+
+std::string EncodeHeader(std::string filename, std::string segCRC, std::string fileCRC, int seg);
+
 #endif
 
-#endif // MOORIE_GLOBAL_H
