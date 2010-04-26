@@ -23,6 +23,8 @@
 
 /** @file */
 
+#include <QString>
+#include <QCryptographicHash>
 #include <string>
 #include <cstdlib>
 #include <openssl/md5.h>
@@ -45,7 +47,7 @@ std::string Rot13(std::string str);
  * @return Enciphered text.
  */
 std::string rot13(const std::string& str);
-std::string getMD5(unsigned char* string);
+QString getMD5(QString string);
 /**
 */
 char hexToAscii(char first, char second);

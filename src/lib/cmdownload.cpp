@@ -50,7 +50,13 @@ void CMDownload::run()
         }
     }
 }
-bool CMDownload::prepare(){}
+bool CMDownload::prepare(){
+    myHash = HashManager::fromString(_stats->getHashcode());
+
+    _stats->setState(CMStats::prepared);
+    emitStatsChanged();
+    return myHash->getInfo().valid;
+}
 bool CMDownload::selectMailbox(){}
 bool CMDownload::startTransfer(){}
 bool CMDownload::finalize(){}

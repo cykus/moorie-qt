@@ -21,7 +21,6 @@
 #include <QRegExp>
 #include "hashmanager.h"
 #include "hashdecoder.h"
-#include <QSharedPointer>
 #include "moorhunthashdecoder.h"
 
 const QRegExp moorhuntHashRegex("(<<a[a-h].*>>)");
@@ -31,7 +30,7 @@ Hash* HashManager::fromString(const QString& hashcode) {
     int pos = 0;
     if (moorhuntHashRegex.indexIn(hashcode, pos) != -1) {
 
-        QSharedPointer<HashDecoder> decoder(new MoorhuntHashDecoder());
+        HashDecoder *decoder(new MoorhuntHashDecoder());
         return decoder->decode(moorhuntHashRegex.cap(1));
     }
     else

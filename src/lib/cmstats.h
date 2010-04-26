@@ -35,6 +35,7 @@ public:
             prepared,
             startingTransfer,
             transfering,
+            segmentTransferred,
             transferred,
             finalized,
             stateInvalid = -1

@@ -40,8 +40,8 @@ struct HashInfo {
 	};
 	
 	bool valid; //!< Flag indicating whether hash is valid, set on decoding.
-        QChar verMaj;
-        QChar verMin;
+        char verMaj;
+        char verMin;
         QString fileName; //!< Downloaded file name (as provided in hashfile).
 	long fileSize;        ///< Size of the upload.
 	unsigned int crc;     ///< Control checksum.
@@ -72,7 +72,7 @@ struct HashInfo {
         QString fullTitle;
         QString uploader;
         QString comment;
-        QString hashString; //!< raw hash QString (base64 encoded)
+        std::string hashString; //!< raw hash QString (base64 encoded)
 
 	/** 
 	 * Creates hash info object.

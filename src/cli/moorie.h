@@ -18,29 +18,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */ 
 
-#ifndef CMDOWNLOAD_H
-#define CMDOWNLOAD_H
+#ifndef MOORIE_H
+#define MOORIE_H
 
-#include "cmtransfer.h"
-#include "hash.h"
-#include "hashmanager.h"
-
-class CMDownload: public CMTransfer
+#include <QObject>
+#include <iostream>
+#include "src/lib/libmoorie.h"
+class moorie : public QObject
 {
+Q_OBJECT
 public:
-    CMDownload(CMStats *stats );
-
-    void run();
-    bool prepare();
-    bool selectMailbox();
-    bool startTransfer();
-    bool finalize();
-    bool resume();
-    bool needsResuming();
-    bool abort();
+    explicit moorie(QObject *parent = 0);
+    void addDownloadTransfer(CMStats::type t,
+                            CMStats::state s,
+                            QString hashcode,
+                            QString filePath,
+                            int mailbox
+                            );
 private:
-    Hash *myHash;
-    bool doStop;
+    Libmoorie moor;
+
+public slots:
+    void refreashStats(CMStats *s);
 };
 
-#endif // CMDOWNLOAD_H
+#endif // MOORIE_H

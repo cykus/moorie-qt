@@ -18,29 +18,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */ 
 
-#ifndef CMDOWNLOAD_H
-#define CMDOWNLOAD_H
+#include "moorie.h"
 
-#include "cmtransfer.h"
-#include "hash.h"
-#include "hashmanager.h"
-
-class CMDownload: public CMTransfer
+moorie::moorie(QObject *parent) :
+    QObject(parent)
 {
-public:
-    CMDownload(CMStats *stats );
+}
+void moorie::refreashStats(CMStats *s)
+{
+    std::cerr << qPrintable(CMStats::stateToLocaleString(s->getState()));
+}
+void moorie::addDownloadTransfer(CMStats::type t,CMStats::state s,QString hashcode,QString filePath,int mailbox)
+{
+    int transferID = moor.addDownloadTransfer(t,s,hashcode,filePath,mailbox);
 
-    void run();
-    bool prepare();
-    bool selectMailbox();
-    bool startTransfer();
-    bool finalize();
-    bool resume();
-    bool needsResuming();
-    bool abort();
-private:
-    Hash *myHash;
-    bool doStop;
-};
+    connect( moor.transfers.value(transferID),
+            SIGNAL(statsChanged(CMStats*)),
+            SLOT(refreashStats(CMStats*)), Qt::QueuedConnection);
 
-#endif // CMDOWNLOAD_H
+    moor.transfers.value(transferID)->start();
+}

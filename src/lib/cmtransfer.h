@@ -16,31 +16,42 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */ 
+ */
 
-#ifndef CMDOWNLOAD_H
-#define CMDOWNLOAD_H
+#ifndef CMTRANSFER_H
+#define CMTRANSFER_H
 
-#include "cmtransfer.h"
-#include "hash.h"
-#include "hashmanager.h"
+#include <QThread>
+#include "cmstats.h"
 
-class CMDownload: public CMTransfer
+class CMTransfer : public QThread
 {
-public:
-    CMDownload(CMStats *stats );
+        Q_OBJECT
 
-    void run();
-    bool prepare();
-    bool selectMailbox();
-    bool startTransfer();
-    bool finalize();
-    bool resume();
-    bool needsResuming();
-    bool abort();
-private:
-    Hash *myHash;
-    bool doStop;
+public:
+    CMTransfer(CMStats *stats);
+    virtual void run() = 0;
+    virtual bool prepare() = 0;
+
+    virtual bool selectMailbox() = 0;
+
+    virtual bool startTransfer() = 0;
+    virtual bool finalize() = 0;
+
+    virtual bool resume() = 0;
+    virtual bool needsResuming() = 0;
+
+    virtual bool abort() = 0;
+
+    CMStats *getStats();
+
+signals:
+    void statsChanged(CMStats *stats);
+    //void transferFinished(Qp2mTransferFile*);
+
+protected:
+    void emitStatsChanged();
+    CMStats *_stats;
 };
 
-#endif // CMDOWNLOAD_H
+#endif // CMTRANSFER_H

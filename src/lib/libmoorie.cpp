@@ -34,9 +34,7 @@ int Libmoorie::addDownloadTransfer(CMStats::type t,
                                    QString filePath,
                                    int mailbox)
 {
-    CMStats stat(transfersCount,t, s,hashcode,filePath,mailbox); //!<< tworzymy obiekt "statów" dla konkretnego transferu
-    stats.insert(transfersCount, &stat); //!< wrzucamy staty do hasha
-    CMDownload file(stats.value(transfersCount)); //!< wrzucamy wskaźnik na staty do obieku "transferu"
-    transfers.insert(transfersCount,&file); // wrzucamy transfer do hasha
+    stats.insert(transfersCount, new CMStats(transfersCount,t, s,hashcode,filePath,mailbox)); //!< wrzucamy staty do hasha
+    transfers.insert(transfersCount, new CMDownload(stats.value(transfersCount))); // wrzucamy transfer do hasha
     return transfersCount++; //!< zwracamy numer transferu/statów i zwiększamy index transferów o jeden
 }

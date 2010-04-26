@@ -22,34 +22,50 @@
 #include <iostream>
 #include <QStringList>
 #include <QString>
-#include <QDebug>
+#include <QTextStream>
 #include <QFile>
-#include <QSharedPointer>
+#include <QObject>
 #include "anyoption.h"
-#include "src/lib/libmoorie.h"
+#include "moorie.h"
 #include "src/lib/hashmanager.h"
-#include "src/lib/tools.h"
 #include "src/lib/hash.h"
+#include "src/lib/tools.h"
 
+
+void refreashTransferStats(CMStats s)
+{}
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
+    static QTextStream cout(stdout, QIODevice::WriteOnly);
 
-    QString hash;
-    QString pass = "p2mforum.info";
+    // usage
+    moorie moorie;
+    QString hash = "";
+    QString pass = "";
+    QString path = "";
+    int mailbox  = 1 ;
+
     bool download = false;
     /************************************************************/
     AnyOption *opt = new AnyOption();
     opt->setVerbose(); /* print warnings about unknown options */
     opt->autoUsagePrint(true); /* print usage for bad options */
-    opt->addUsage( "" );
     opt->addUsage( "Usage: " );
     opt->addUsage( "" );
-    opt->addUsage( " -h  --help                         Prints help " );
-    opt->addUsage( " -f  --hash file.txt                Hash file " );
+    opt->addUsage( " -h  --help\n   Prints help" );
+    opt->addUsage( "" );
+    opt->addUsage( " --hash <file> -f <file>\n   Hash file " );
+    opt->addUsage( " --password <password> -p <password>\n   Hash file " );
+    opt->addUsage( " --path <path>\n   download path " );
+    opt->addUsage( " --mailbox <number> -m <number>\n   Select mailbox " );
+    //opt->addUsage( " -s \"hashcode\" --shash \"hashcode\" \n   Hash string " );
     opt->addUsage( "" );
     opt->setFlag(  "help", 'h' );   /* a flag (takes no argument), supporting long and short form */
     opt->setOption(  "hash", 'f' ); /* an option (takes an argument), supporting long and short form */
+    opt->setOption(  "password", 'p' ); /* an option (takes an argument), supporting long and short form */
+    opt->setOption(  "mailbox", 'm' ); /* an option (takes an argument), supporting long and short form */
+    opt->setOption(  "path"); /* an option (takes an argument), supporting long and short form */
     opt->processCommandArgs( argc, argv );
     if( ! opt->hasOptions()) { /* print usage if no options */
         opt->printUsage();
@@ -57,8 +73,15 @@ int main(int argc, char *argv[])
         return 0;
     }
     /*GET THE VALUES */
-    if( opt->getFlag( "help" ) || opt->getFlag( 'h' ) )
+    if( opt->getFlag( 'h' )  || opt->getFlag( "help" ) )
         opt->printUsage();
+    if( opt->getValue( 'p' ) != NULL || opt->getValue( "password" ) != NULL )
+        pass = opt->getValue( 'p' );
+    if( opt->getValue( "path" ) != NULL )
+        path = opt->getValue( "path" );
+    if( opt->getValue( 'm' ) != NULL )
+        mailbox = QString(opt->getValue( "m" )).toInt();
+
     if( opt->getValue( 'f' ) != NULL  || opt->getValue( "hash" ) != NULL  )
     {
         QFile file( QString(opt->getValue( 'f' )) );
@@ -71,7 +94,6 @@ int main(int argc, char *argv[])
             download = true;
         }
     }
-
     /*DONE */
     delete opt;
 
@@ -81,32 +103,30 @@ int main(int argc, char *argv[])
             Hash *hhash(HashManager::fromString(hash));
             if (hhash->getInfo().valid)
             {
-                std::string myPass;
+                QString myPass;
                 if (hhash->getInfo().accessPasswd.length() == 32) {
-                    myPass = getMD5((unsigned char*)pass.toStdString().c_str());
+                    myPass = getMD5(pass);
                 } else
-                    myPass = pass.toStdString().c_str();
-
-                if(myPass.compare( hhash->getInfo().accessPasswd.toLatin1()) == 0)
+                    myPass = pass;
+                if(myPass.compare( hhash->getInfo().accessPasswd) == 0)
                 {
-                    Libmoorie moor;
-                    moor.addDownloadTransfer(CMStats::download,
-                                                       CMStats::unprepared,
-                                                       "sss/sss\n",
-                                                       hash,
-                                                       0);
+                    moorie.addDownloadTransfer(CMStats::download,
+                                             CMStats::unprepared,
+                                             path,
+                                             hash,
+                                             mailbox-1);
                 }
-                else std::cerr << std::endl << "Blad: Podane haslo pobierania jest nieprawidlowe!" << std::endl << std::endl;
+                else cout << "Error: password incorrect!\n";
 
             }
-            else std::cerr << "Niepoprawny hashcode" << std::endl;
+            else cout << "Error: hashcode incorrect\n";
 
         }
         catch (std::exception& e)
         {
-            std::cerr << "Blad! " << e.what() << std::endl;
+            cout << "Error! " << e.what() << '\n';
         }
     }
-    exit(1);
+
     return a.exec();
 }

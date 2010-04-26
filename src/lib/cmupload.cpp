@@ -18,29 +18,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */ 
 
-#ifndef CMDOWNLOAD_H
-#define CMDOWNLOAD_H
+#include "cmupload.h"
 
-#include "cmtransfer.h"
-#include "hash.h"
-#include "hashmanager.h"
-
-class CMDownload: public CMTransfer
+CMUpload::CMUpload(CMStats *stats ):
+        CMTransfer(stats)
 {
-public:
-    CMDownload(CMStats *stats );
+}
 
-    void run();
-    bool prepare();
-    bool selectMailbox();
-    bool startTransfer();
-    bool finalize();
-    bool resume();
-    bool needsResuming();
-    bool abort();
-private:
-    Hash *myHash;
-    bool doStop;
-};
-
-#endif // CMDOWNLOAD_H
+void CMUpload::run(){}
+bool CMUpload::prepare(){}
+bool CMUpload::selectMailbox(){}
+bool CMUpload::startTransfer(){}
+bool CMUpload::finalize(){}
+bool CMUpload::resume(){}
+bool CMUpload::needsResuming(){}
+bool CMUpload::abort(){}
