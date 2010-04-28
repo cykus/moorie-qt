@@ -18,29 +18,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */ 
 
-#include "moorie.h"
+#ifndef LOG_H
+#define LOG_H
 
-moorie::moorie(QObject *parent) :
-    QObject(parent)
-{
-    connect(log::self(), SIGNAL(showMessage(const int,const QString &)),
-            this, SLOT(showLog(const int, const QString &)));
-}
-void moorie::showLog(const int level, const QString & message)
-{
-    std::cerr << qPrintable(message) << " " << level;
-}
-void moorie::refreashStats(CMStats *s)
-{
-    std::cerr << qPrintable(CMStats::stateToLocaleString(s->getState()));
-}
-void moorie::addDownloadTransfer(CMStats::type t,CMStats::state s,QString hashcode,QString filePath,int mailbox)
-{
-    int transferID = moor.addDownloadTransfer(t,s,hashcode,filePath,mailbox);
+#include <QObject>
 
-    connect( moor.transfers.value(transferID),
-            SIGNAL(statsChanged(CMStats*)),
-            SLOT(refreashStats(CMStats*)), Qt::QueuedConnection);
+#define LOG(level, msg) log::self()->show(level, msg )
 
-    moor.transfers.value(transferID)->start();
-}
+class log : public QObject
+{
+Q_OBJECT
+public:
+    static log *self();
+
+    enum Level
+    {
+            Debug,
+            Info,
+            Warn,
+            Error,
+    };
+
+    void show(const int level, const QString &msg);
+signals:
+    void showMessage(const int level, const QString &msg);
+
+private:
+    log(){}; // private constructor
+    static log *_self;
+
+};
+
+#endif // LOG_H

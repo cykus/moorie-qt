@@ -23,6 +23,7 @@
 
 #include <QThread>
 #include "cmstats.h"
+#include "log.h"
 
 class CMTransfer : public QThread
 {

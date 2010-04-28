@@ -1,5 +1,7 @@
 !include( ../../moorie.pri ):error( Nie można znaleść pliku moorie.pri! )
 QT -= gui
+QT += network \
+    webkit
 TARGET = ../../build/moorie
 CONFIG += console debug
 CONFIG -= app_bundle

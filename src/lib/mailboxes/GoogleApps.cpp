@@ -23,7 +23,7 @@
 
 #include <sstream>
 namespace {
-    CMailBox* Create(const std::string& name,
+    mailbox* Create(const std::string& name,
                      const std::string& username,
                      const std::string& password)
     {
@@ -48,7 +48,7 @@ const bool registered = MailboxFactory::Instance().Register(c_names, Create);
 
 GoogleAppsMailbox::GoogleAppsMailbox(const std::string &name, const std::string &usr, const std::string
                                      &passwd)
-                                         : CMailBox(name, usr, passwd),
+                                         : mailbox(),
                                          totalEmails( 0 )
 {
 }
@@ -72,7 +72,7 @@ int GoogleAppsMailbox::downloadRequest(int seg)
 }
 
 int GoogleAppsMailbox::uploadRequest(std::string filename, std::vector<std::string> to, int seg) {
-    std::string segCRC = getSegCRC(filename);
+   // std::string segCRC = getSegCRC(filename);
 }
 
 GoogleAppsMailbox::~GoogleAppsMailbox()

@@ -24,11 +24,11 @@
 #include <map>
 #include <string>
 
-class CMailBox;
+class mailbox;
 
 class MailboxFactory {
 	public:
-                typedef CMailBox* (*MailboxCreator)(const std::string&, const std::string&, const std::string&);
+                typedef mailbox* (*MailboxCreator)(const std::string&, const std::string&, const std::string&);
 
 	public:
 		/**
@@ -71,7 +71,7 @@ class MailboxFactory {
 		 * @param password Password for that mailbox.
 		 * @return Ptr to mailbox object or NULL.
 		 */
-		CMailBox* Create(const std::string& name,
+                mailbox* Create(const std::string& name,
 		                 const std::string& username,
 		                 const std::string& password);
 

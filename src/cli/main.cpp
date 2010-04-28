@@ -19,12 +19,12 @@
  */
 
 #include <QtCore/QCoreApplication>
-#include <iostream>
+
 #include <QStringList>
 #include <QString>
 #include <QTextStream>
-#include <QFile>
 #include <QObject>
+#include <QFile>
 #include "anyoption.h"
 #include "moorie.h"
 #include "src/lib/hashmanager.h"
@@ -32,12 +32,13 @@
 #include "src/lib/tools.h"
 
 
-void refreashTransferStats(CMStats s)
-{}
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    static QTextStream cout(stdout, QIODevice::WriteOnly);
+
+    QTextStream cin(stdin, QIODevice::ReadOnly);
+    QTextStream cout(stdout, QIODevice::WriteOnly);
+    QTextStream cerr(stderr, QIODevice::WriteOnly);
 
     // usage
     moorie moorie;
@@ -116,15 +117,15 @@ int main(int argc, char *argv[])
                                              hash,
                                              mailbox-1);
                 }
-                else cout << "Error: password incorrect!\n";
+                else cout << "Error: password incorrect!" << endl;
 
             }
-            else cout << "Error: hashcode incorrect\n";
+            else cout << "Error: hashcode incorrect" << endl;
 
         }
         catch (std::exception& e)
         {
-            cout << "Error! " << e.what() << '\n';
+            cout << "Error! " << e.what() << endl;
         }
     }
 

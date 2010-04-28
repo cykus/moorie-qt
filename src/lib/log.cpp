@@ -18,29 +18,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */ 
 
-#include "moorie.h"
-
-moorie::moorie(QObject *parent) :
-    QObject(parent)
-{
-    connect(log::self(), SIGNAL(showMessage(const int,const QString &)),
-            this, SLOT(showLog(const int, const QString &)));
+#include "log.h"
+log* log::_self = 0;
+log* log::self() {
+  if(_self == 0) {
+      _self = new log();
+  }
+  return _self;
 }
-void moorie::showLog(const int level, const QString & message)
-{
-    std::cerr << qPrintable(message) << " " << level;
-}
-void moorie::refreashStats(CMStats *s)
-{
-    std::cerr << qPrintable(CMStats::stateToLocaleString(s->getState()));
-}
-void moorie::addDownloadTransfer(CMStats::type t,CMStats::state s,QString hashcode,QString filePath,int mailbox)
-{
-    int transferID = moor.addDownloadTransfer(t,s,hashcode,filePath,mailbox);
 
-    connect( moor.transfers.value(transferID),
-            SIGNAL(statsChanged(CMStats*)),
-            SLOT(refreashStats(CMStats*)), Qt::QueuedConnection);
-
-    moor.transfers.value(transferID)->start();
+void log::show(const int level, const QString& msg )
+{
+  emit showMessage(level, msg);
 }

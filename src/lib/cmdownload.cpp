@@ -29,7 +29,6 @@ void CMDownload::run()
 {
     while(!doStop)
     {
-
         CMStats::state state = getStats()->getState();
 
         if(needsResuming())
@@ -38,7 +37,11 @@ void CMDownload::run()
         if( state == CMStats::unprepared )
         {
             if( prepare() )
+                selectMailbox();
                 startTransfer();
+                mailbox mail;
+                qDebug() << mail.doGet("http://github.com/swiezy/moorie/blob/master/src/libmoor/MailboxJS.cpp");
+
         }
         else if( state == CMStats::prepared )
         {

@@ -24,6 +24,8 @@
 #include "cmtransfer.h"
 #include "hash.h"
 #include "hashmanager.h"
+#include "mailbox.h"
+#include <QDebug>
 
 class CMDownload: public CMTransfer
 {

@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-class GoogleAppsMailbox: public CMailBox
+class GoogleAppsMailbox: public mailbox
 {
     public:
 	private:

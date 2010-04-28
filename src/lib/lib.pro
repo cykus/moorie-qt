@@ -1,7 +1,6 @@
 !include( ../../moorie.pri ):error( Nie można znaleść pliku moorie.pri! )
 QT += network \
-    webkit \
-    xml
+    webkit
 QT -= gui
 TARGET = ../../build/moorie
 TEMPLATE = lib
@@ -20,9 +19,10 @@ SOURCES += libmoorie.cpp \
     stringutils.cpp \
     decoder.cpp \
     mailboxfactory.cpp \
-    mailbox.cpp \
     emailheader.cpp \
-    moorhunthash.cpp
+    moorhunthash.cpp \
+    log.cpp \
+    mailbox.cpp
 HEADERS += libmoorie.h \
     mailboxes/GoogleApps.h \
     libmoorie_global.h \
@@ -41,15 +41,12 @@ HEADERS += libmoorie.h \
     stringutils.h \
     decoder.h \
     mailboxfactory.h \
-    mailbox.h \
     emailheader.h \
-    moorhunthash.h
-
-unix {
+    moorhunthash.h \
+    log.h \
+    mailbox.h
+unix { 
     HARDWARE_PLATFORM = $$system(uname -i)
-    contains( HARDWARE_PLATFORM, x86_64 ) {
-        LIBS += ../../libs/libmoorhunt.a
-    } else {
-        LIBS += ../../libs/libmoorhunt64.a
-    }
+    contains( HARDWARE_PLATFORM, x86_64 ):LIBS += ../../libs/libmoorhunt.a
+    else:LIBS += ../../libs/libmoorhunt64.a
 }

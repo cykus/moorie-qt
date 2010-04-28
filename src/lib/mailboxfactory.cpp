@@ -54,7 +54,7 @@ bool MailboxFactory::Unregister(const std::string& name) {
 	return (creators_.erase(name) == 1);
 }
 
-CMailBox* MailboxFactory::Create(const std::string& name,
+mailbox* MailboxFactory::Create(const std::string& name,
                                  const std::string& username,
                                  const std::string& password)
 {

@@ -24,9 +24,11 @@
 #include <QObject>
 #include <iostream>
 #include "src/lib/libmoorie.h"
+#include "src/lib/log.h"
 class moorie : public QObject
 {
 Q_OBJECT
+
 public:
     explicit moorie(QObject *parent = 0);
     void addDownloadTransfer(CMStats::type t,
@@ -37,9 +39,9 @@ public:
                             );
 private:
     Libmoorie moor;
-
 public slots:
     void refreashStats(CMStats *s);
+    void showLog(const int ,const QString &);
 };
 
 #endif // MOORIE_H
