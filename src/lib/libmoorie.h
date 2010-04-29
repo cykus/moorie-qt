@@ -29,9 +29,9 @@
 #include <QTextCodec>
 #include <QHash>
 
-class MOORIESHARED_EXPORT Libmoorie {
+class MOORIESHARED_EXPORT LibMoorie {
 public:
-    Libmoorie();
+    LibMoorie();
     QHash<int,CMTransfer*> transfers; //!< Hash wszystkich transferów
     QHash<int,CMStats*> stats; //!< Hash wszystkich transferów powiązanych z transferami
     int addDownloadTransfer(CMStats::type t,

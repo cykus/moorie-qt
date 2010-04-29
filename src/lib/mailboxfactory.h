@@ -21,14 +21,14 @@
 #ifndef MAILBOX_FACTORY_H__
 #define MAILBOX_FACTORY_H__
 
-#include <map>
-#include <string>
+#include <QMap>
+#include <QString>
 
-class mailbox;
+class Mailbox;
 
 class MailboxFactory {
 	public:
-                typedef mailbox* (*MailboxCreator)(const std::string&, const std::string&, const std::string&);
+                typedef Mailbox* (*MailboxCreator)(const QString&, const QString&, const QString&);
 
 	public:
 		/**
@@ -37,7 +37,7 @@ class MailboxFactory {
 		 * @param creator Pointer to function that creates mailbox.
 		 * @return True if registered successfuly, false otherwise.
 		 */
-		bool Register(const std::string& name, MailboxCreator creator);
+                bool Register(const QString& name, MailboxCreator creator);
 
 		/**
 		 * Registers single creator for multi mailbox objects.
@@ -48,21 +48,21 @@ class MailboxFactory {
 		 * @param creator Pointer to function that creates mailbox.
 		 * @return True if all registered, false otherwise.
 		 */
-		bool Register(const std::string names[], MailboxCreator creator);
+                bool Register(const QString names[], MailboxCreator creator);
 
 		/**
 		 * Checks if mailbox has been registered.
 		 * @param name Name of mailbox.
 		 * @return True if mailbox creator was found, false otherwise.
 		 */
-		bool Registered(const std::string& name);
+                bool Registered(const QString& name);
 
 		/**
 		 * Unregisters mailbox object creator.
 		 * @param name Name of creator.
 		 * @return Whether operation succeeded (true) or not (false).
 		 */
-		bool Unregister(const std::string& name);
+                bool Unregister(const QString& name);
 
 		/**
 		 * Creates specified object.
@@ -71,9 +71,9 @@ class MailboxFactory {
 		 * @param password Password for that mailbox.
 		 * @return Ptr to mailbox object or NULL.
 		 */
-                mailbox* Create(const std::string& name,
-		                 const std::string& username,
-		                 const std::string& password);
+                Mailbox* Create(const QString& name,
+                                 const QString& username,
+                                 const QString& password);
 
 		/**
 		 * Gets factory instance.
@@ -91,8 +91,9 @@ class MailboxFactory {
 	private:
 		static MailboxFactory* instance_;
 
-	private:
-		typedef std::map<std::string, MailboxCreator> CreatorMap;
+        private:
+                typedef QMap<QString, MailboxCreator> CreatorMap;
+                typedef QMapIterator<QString, MailboxCreator> CreatorMapIterator;
 		CreatorMap creators_;
 };
 

@@ -23,13 +23,13 @@
 
 #include <QObject>
 
-#define LOG(level, msg) log::self()->show(level, msg )
+#define LOG(level, msg) Log::self()->show(level, msg )
 
-class log : public QObject
+class Log : public QObject
 {
 Q_OBJECT
 public:
-    static log *self();
+    static Log *self();
 
     enum Level
     {
@@ -44,8 +44,8 @@ signals:
     void showMessage(const int level, const QString &msg);
 
 private:
-    log(){}; // private constructor
-    static log *_self;
+    Log(){}; // private constructor
+    static Log *_self;
 
 };
 

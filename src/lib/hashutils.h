@@ -42,9 +42,9 @@ std::string md5(const std::string& data);
  */
 std::string sha1(unsigned char data);
 
-QVector<int> split(const QChar* str, int len);
+std::vector<int> split(const char* str, int len);
 
-void splitToVec(const QChar* str, int len, QVector<int>& result);
+void splitToVec(const char* str, int len, std::vector<int>& result);
 
 /**
  * Formats data as string consisting of hex values.

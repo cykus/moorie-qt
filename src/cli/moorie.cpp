@@ -23,16 +23,16 @@
 moorie::moorie(QObject *parent) :
     QObject(parent)
 {
-    connect(log::self(), SIGNAL(showMessage(const int,const QString &)),
+    connect(Log::self(), SIGNAL(showMessage(const int,const QString &)),
             this, SLOT(showLog(const int, const QString &)));
 }
 void moorie::showLog(const int level, const QString & message)
 {
-    std::cerr << qPrintable(message) << " " << level;
+    std::cerr << qPrintable(message) << " " << level << std::endl;
 }
 void moorie::refreashStats(CMStats *s)
 {
-    std::cerr << qPrintable(CMStats::stateToLocaleString(s->getState()));
+    std::cerr << qPrintable(CMStats::stateToLocaleString(s->getState())) << std::endl;
 }
 void moorie::addDownloadTransfer(CMStats::type t,CMStats::state s,QString hashcode,QString filePath,int mailbox)
 {

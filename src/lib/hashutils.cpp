@@ -51,33 +51,33 @@ std::string sha1(unsigned char data) {
         return hash(MHASH_SHA1, std::string() + static_cast<char>(data));
 }
 
-QVector<int> split(const QChar* str, int len) {
-        QVector<int> result;
-	splitToVec(str, len, result);
+std::vector<int> split(const char* str, int len) {
+        std::vector<int> result;
+        splitToVec(str, len, result);
 
-	return result;
+        return result;
 }
 
-void splitToVec(const QChar* str, int len, QVector<int>& result) {
-	const char delim = '|';
-	int begin = 0;
-	int i = 0;
-	int tokens = 0;
-	while (i < len)	{
-		if (str[i] == delim) {
-			result.push_back(begin);
-			result.push_back(i - begin);
-			begin = i + 1;
-			++tokens;
-			// special case for crc byte - always 4, may contain 0x7c character
-			if (tokens == 1) {
-				i += 5;
-				++tokens;
-				continue;
-			}
-		}
-		++i;
-	}
+void splitToVec(const char* str, int len, std::vector<int>& result) {
+        const char delim = '|';
+        int begin = 0;
+        int i = 0;
+        int tokens = 0;
+        while (i < len)	{
+                if (str[i] == delim) {
+                        result.push_back(begin);
+                        result.push_back(i - begin);
+                        begin = i + 1;
+                        ++tokens;
+                        // special case for crc byte - always 4, may contain 0x7c character
+                        if (tokens == 1) {
+                                i += 5;
+                                ++tokens;
+                                continue;
+                        }
+                }
+                ++i;
+        }
 }
 
 std::string hashToStr(unsigned char* data, unsigned int size) {

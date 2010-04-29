@@ -23,53 +23,53 @@
 MailboxFactory* MailboxFactory::instance_ = 0;
 
 MailboxFactory& MailboxFactory::Instance() {
-	if (!instance_)
-		instance_ = new MailboxFactory;
+    if (!instance_)
+        instance_ = new MailboxFactory;
 
-	return *instance_;
+    return *instance_;
 }
 
 bool
-MailboxFactory::Register(const std::string& name, MailboxCreator creator) {
-	return creators_.insert(CreatorMap::value_type(name, creator)).second;
+        MailboxFactory::Register(const QString& name, MailboxCreator creator) {
+    return creators_.insert(name, creator).value();
 }
 
 bool
-MailboxFactory::Register(const std::string names[], MailboxCreator creator) {
-	bool result;
-	for (unsigned int i = 0; !names[i].empty(); ++i) {
-		result = creators_.insert(CreatorMap::value_type(names[i], creator)).second;
-		if (!result)
-			break;
-	}
+        MailboxFactory::Register(const QString names[], MailboxCreator creator) {
+    bool result;
+    for (unsigned int i = 0; !names[i].isEmpty() ; ++i) {
+        result = creators_.insert(names[i], creator).value();
+        if (!result)
+            break;
+    }
 
-	return result;
+    return result;
 }
 
-bool MailboxFactory::Registered(const std::string& name) {
-	return (creators_.find(name) != creators_.end());
+bool MailboxFactory::Registered(const QString& name) {
+    return (creators_.find(name) != creators_.end());
 }
 
-bool MailboxFactory::Unregister(const std::string& name) {
-	return (creators_.erase(name) == 1);
+bool MailboxFactory::Unregister(const QString& name) {
+    return (creators_.remove(name) == 1);
 }
 
-mailbox* MailboxFactory::Create(const std::string& name,
-                                 const std::string& username,
-                                 const std::string& password)
+Mailbox* MailboxFactory::Create(const QString& name,
+                                const QString& username,
+                                const QString& password)
 {
-	CreatorMap::const_iterator it = creators_.find(name);
-	if (it != creators_.end()) {
-		try {
-                        return (it->second)(name, username, password);
-		}
-		catch (...) {
-			// Hopefully only std::bad_alloc can be thrown here.
-			return 0;
-		}
-	}
+    CreatorMap::const_iterator it = creators_.find(name);
+    if (it != creators_.end()) {
+        try {
+            return (it.value())(name, username, password);
+        }
+        catch (...) {
+            // Hopefully only std::bad_alloc can be thrown here.
+            return 0;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 MailboxFactory::MailboxFactory() {}

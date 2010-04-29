@@ -19,31 +19,107 @@
  */ 
 
 #include "mailbox.h"
+#include <QDebug>
 
-mailbox::mailbox()
+Mailbox::Mailbox(const QString &name, const QString &usr, const QString &passwd):
+        user(usr),
+        mailbox(name),
+        password(passwd),
+        headersList("")
 {
-    manager = new QNetworkAccessManager();
-    connect(manager, SIGNAL(finished(QNetworkReply*)),&eLoop,SLOT(quit()));
+
+    m_request.setRawHeader("User-Agent", "User-Agent: Mozilla/5.0 (compatible;)");
+    m_manager = new QNetworkAccessManager(this);
+    connect(m_manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(replyFinished(QNetworkReply*)));
+    connect(m_manager, SIGNAL( sslErrors (QNetworkReply *,const QList<QSslError>&)),
+            this, SLOT(sslErrors(QNetworkReply *,const QList<QSslError>&)));
 }
 
-QString mailbox::doGet(QString url)
+QString Mailbox::doGet(QString url, bool header)
 {
-    QNetworkRequest request;
-    request.setRawHeader("User-Agent", "User-Agent: Mozilla/5.0 (compatible;)");
-    request.setUrl(QUrl(url));
-    QNetworkReply * reply = manager->get( request );
+    headers = header;
+    host = QUrl(url).host();
+    scheme = QUrl(url).scheme();
+    m_request.setUrl(QUrl(url));
+    m_manager->get( m_request );
     eLoop.exec();
-    return QString(reply->readAll());
+    return resultData;
 }
-QString mailbox::doPost(QString host, QString vars)
+QString Mailbox::doPost(QString url, QString vars, bool header)
 {
-    QNetworkRequest request;
-    request.setRawHeader("User-Agent", "User-Agent: Mozilla/5.0 (compatible;)");
-    request.setUrl(QUrl(url));
-    QNetworkReply * reply = manager->post( request, vars.toAscii());
+    headers = header;
+    host = QUrl(url).host();
+    scheme = QUrl(url).scheme();
+    m_request.setUrl(QUrl(url));
+    m_manager->post( m_request, vars.toAscii());
     eLoop.exec();
-    return QString(reply->readAll());
+    return resultData;
 }
-mailbox::~mailbox()
+void Mailbox::replyFinished(QNetworkReply *reply)
 {
+    if(headers)
+    {
+        for (int i = 0; i < reply->rawHeaderList().size(); ++i)
+        {
+            headersList += reply->rawHeaderList().at(i);
+            headersList += " : ";
+            headersList += reply->rawHeader(reply->rawHeaderList().at(i));
+            headersList += "\n";
+        }
+        resultData = headersList;
+    }
+    resultData += reply->readAll();
+    QUrl redir = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+    if (!redir.isEmpty())
+    {
+        if(redir.host() == "")
+        {
+            redir.setScheme(scheme);
+            redir.setHost(host);
+        }
+        else
+        {
+            host = QUrl(redir).host();
+            scheme = QUrl(redir).scheme();
+        }
+        m_request.setUrl(redir);
+        m_manager->get(m_request);
+    }
+    else {
+        eLoop.quit();
+    }
+    reply->deleteLater();
+
+}
+void Mailbox::sslErrors(QNetworkReply *reply,const QList<QSslError> &errors)
+{
+    reply->ignoreSslErrors();
+}
+QString Mailbox::getMailbox() const
+{
+    return mailbox;
+}
+QString Mailbox::getUser() const
+{
+    return user;
+}
+
+QString Mailbox::getPassword() const
+{
+    return password;
+}
+Mailbox::~Mailbox()
+{
+    if(m_manager) {
+        m_manager->deleteLater();
+    }
+}
+QString Mailbox::escape(QString q)
+{
+    QUrl escaped(q);
+   return QString(escaped.toEncoded());
+}
+QString Mailbox::unescape(QString q)
+{
+   return QString(QUrl::fromPercentEncoding(q.toAscii()));
 }

@@ -6,7 +6,6 @@ TARGET = ../../build/moorie
 TEMPLATE = lib
 DEFINES += MOORIE_LIBRARY
 SOURCES += libmoorie.cpp \
-    mailboxes/GoogleApps.cpp \
     cmtransfer.cpp \
     cmtools.cpp \
     cmdownload.cpp \
@@ -22,9 +21,9 @@ SOURCES += libmoorie.cpp \
     emailheader.cpp \
     moorhunthash.cpp \
     log.cpp \
-    mailbox.cpp
+    mailbox.cpp \
+    mailboxes/googleappsmailbox.cpp
 HEADERS += libmoorie.h \
-    mailboxes/GoogleApps.h \
     libmoorie_global.h \
     cmtransfer.h \
     cmtools.h \
@@ -44,7 +43,8 @@ HEADERS += libmoorie.h \
     emailheader.h \
     moorhunthash.h \
     log.h \
-    mailbox.h
+    mailbox.h \
+    mailboxes/googleappsmailbox.h
 unix { 
     HARDWARE_PLATFORM = $$system(uname -i)
     contains( HARDWARE_PLATFORM, x86_64 ):LIBS += ../../libs/libmoorhunt.a

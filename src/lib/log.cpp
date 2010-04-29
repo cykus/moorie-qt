@@ -19,15 +19,15 @@
  */ 
 
 #include "log.h"
-log* log::_self = 0;
-log* log::self() {
+Log* Log::_self = 0;
+Log* Log::self() {
   if(_self == 0) {
-      _self = new log();
+      _self = new Log();
   }
   return _self;
 }
 
-void log::show(const int level, const QString& msg )
+void Log::show(const int level, const QString& msg )
 {
   emit showMessage(level, msg);
 }

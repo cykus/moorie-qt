@@ -19,6 +19,7 @@
  */ 
 
 #include "cmdownload.h"
+#include <QDebug>
 
 CMDownload::CMDownload(CMStats *stats ):
         CMTransfer(stats),
@@ -38,9 +39,7 @@ void CMDownload::run()
         {
             if( prepare() )
                 selectMailbox();
-                startTransfer();
-                mailbox mail;
-                qDebug() << mail.doGet("http://github.com/swiezy/moorie/blob/master/src/libmoor/MailboxJS.cpp");
+            startTransfer();
 
         }
         else if( state == CMStats::prepared )
@@ -51,6 +50,7 @@ void CMDownload::run()
         {
             finalize();
         }
+        doStop =true;
     }
 }
 bool CMDownload::prepare(){
@@ -61,7 +61,27 @@ bool CMDownload::prepare(){
     return myHash->getInfo().valid;
 }
 bool CMDownload::selectMailbox(){}
-bool CMDownload::startTransfer(){}
+bool CMDownload::startTransfer(){
+    int selected = 0;
+    for (int i = 0; i < myHash->getInfo().accounts.size(); ++i) {
+        qDebug() << "name: " <<     myHash->getInfo().accounts.at(i).name;
+        qDebug() << "login: " <<    myHash->getInfo().accounts.at(i).login ;
+        qDebug() << "password: " << myHash->getInfo().accounts.at(i).password;
+    };
+    LOG(Log::Info, "saas:" +QString::number(myHash->getInfo().accounts.size()) + "22");
+    QString mailbox = myHash->getInfo().accounts[selected].name;
+    QString login = myHash->getInfo().accounts[selected].login;
+    QString passwd = myHash->getInfo().accounts[selected].password;
+
+    myMailBox = MailboxFactory::Instance().Create(mailbox, login, passwd);
+    if (myMailBox) {
+        LOG(Log::Info, "Logowanie do: " + myHash->getInfo().accounts[selected].name);
+        myHash->getInfo().accounts[selected].name;
+        if (myMailBox->loginRequest() == 0) {
+            LOG(Log::Info, "Zalogowano: ");
+        }
+    }
+}
 bool CMDownload::finalize(){}
 bool CMDownload::resume(){}
 bool CMDownload::needsResuming(){}

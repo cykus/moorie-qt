@@ -38,7 +38,7 @@ public:
                             int mailbox
                             );
 private:
-    Libmoorie moor;
+    LibMoorie moor;
 public slots:
     void refreashStats(CMStats *s);
     void showLog(const int ,const QString &);

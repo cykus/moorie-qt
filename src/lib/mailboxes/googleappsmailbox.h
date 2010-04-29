@@ -16,46 +16,37 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
+ */ 
 
-#ifndef CMTRANSFER_H
-#define CMTRANSFER_H
+#ifndef GOOGLEAPPSMAILBOX_H
+#define GOOGLEAPPSMAILBOX_H
 
-#include <QThread>
-#include "cmstats.h"
-#include "log.h"
+#include "mailbox.h"
 #include "mailboxfactory.h"
+#include "log.h"
+#include <QRegExp>
 
-class CMTransfer : public QThread
+class GoogleAppsMailbox: public Mailbox
 {
-        Q_OBJECT
+    Q_OBJECT;
+    QString auth;
+    int totalEmails;
+    QString page;
 
+    QString postlink;
+    QString base;
+    QString url;
+    QString myvars;
 public:
-    CMTransfer(CMStats *stats);
-    virtual void run() = 0;
-    virtual bool prepare() = 0;
+    GoogleAppsMailbox(const QString &name, const QString &usr, const QString &passwd);
+    ~GoogleAppsMailbox();
+    int loginRequest();
+    void logoutRequest();
+    void getHeadersRequest();
+    int downloadRequest(int seg);
 
-    virtual bool selectMailbox() = 0;
+    void parseResponse();
 
-    virtual bool startTransfer() = 0;
-    virtual bool finalize() = 0;
-
-    virtual bool resume() = 0;
-    virtual bool needsResuming() = 0;
-
-    virtual bool abort() = 0;
-
-    CMStats *getStats();
-
-signals:
-    void statsChanged(CMStats *stats);
-    //void transferFinished(Qp2mTransferFile*);
-
-protected:
-    void emitStatsChanged();
-    CMStats *_stats;
-    Mailbox* myMailBox;
-private:
 };
 
-#endif // CMTRANSFER_H
+#endif // GOOGLEAPPSMAILBOX_H
