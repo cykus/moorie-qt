@@ -27,9 +27,9 @@
 #include <QFile>
 #include "anyoption.h"
 #include "moorie.h"
-#include "src/lib/hashmanager.h"
-#include "src/lib/hash.h"
-#include "src/lib/tools.h"
+#include "hashmanager.h"
+#include "hash.h"
+#include "tools.h"
 
 
 int main(int argc, char *argv[])

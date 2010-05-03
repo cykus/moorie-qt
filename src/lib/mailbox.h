@@ -29,8 +29,8 @@ class Mailbox : public QObject
 {
     Q_OBJECT
 
-    QNetworkAccessManager *m_manager;
-    QNetworkRequest m_request;
+    QNetworkAccessManager *m_manager; // network manager
+    QNetworkRequest m_request; //
     QEventLoop eLoop; //Used to stop main loop
     QString mailbox; //!< Mailbox Name
     QString user; //!< User login
@@ -38,9 +38,9 @@ class Mailbox : public QObject
 
     // sprawdzanie przekierowań w metodzie GET nie ruszać
     QNetworkRequest request;
-    QString host;
+    QString host; //!< host address if URL is relative
     QString resultData;
-    QString scheme;
+    QString scheme; //!< eg. https, http, ftp etc.
     bool headers;
     QString headersList;
 private slots:

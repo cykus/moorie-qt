@@ -23,8 +23,8 @@
 
 #include <QObject>
 #include <iostream>
-#include "src/lib/libmoorie.h"
-#include "src/lib/log.h"
+#include "libmoorie.h"
+#include "log.h"
 class moorie : public QObject
 {
 Q_OBJECT
